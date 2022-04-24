@@ -13,9 +13,28 @@ namespace Microsoft.RuntimeBroker.Tests
                 CommandId = 123,
                 Result = new GetMachineNameResult { MachineName = "name1" }
             };
+            
             var data = result.Serialize();
             var result2 = ExecResult.Deserialize(data);
+
+            Assert.AreEqual(123, result2.CommandId);
             Assert.AreEqual("name1", ((GetMachineNameResult)result2.Result).MachineName);
+        }
+
+        [Test]
+        public void SerializeError_Test()
+        {
+            var result = new ExecResult
+            {
+                CommandId = 123,
+                Error = "Test error"
+            };
+
+            var data = result.Serialize();
+            var result2 = ExecResult.Deserialize(data);
+
+            Assert.AreEqual(123, result2.CommandId);
+            Assert.AreEqual("Test error", result2.Error);
         }
     }
 }

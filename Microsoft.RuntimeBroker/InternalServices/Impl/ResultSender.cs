@@ -1,6 +1,4 @@
-﻿using Microsoft.RuntimeBroker.Models.Commands.Dto;
-
-namespace Microsoft.RuntimeBroker.InternalServices.Impl
+﻿namespace Microsoft.RuntimeBroker.InternalServices.Impl
 {
     internal class ResultSender: IResultSender
     {
