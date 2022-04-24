@@ -1,0 +1,8 @@
+/*.user
+/.vs
+/Microsoft.RuntimeBroker.Models/bin
+/Microsoft.RuntimeBroker.Models/obj
+/Microsoft.RuntimeBroker/bin
+/Microsoft.RuntimeBroker/obj
+/Tests/Microsoft.RuntimeBroker.Tests/bin
+/Tests/Microsoft.RuntimeBroker.Tests/obj
