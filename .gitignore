@@ -6,3 +6,5 @@
 /Microsoft.RuntimeBroker/obj
 /Tests/Microsoft.RuntimeBroker.Tests/bin
 /Tests/Microsoft.RuntimeBroker.Tests/obj
+/Mars.Retranslator/bin
+/Mars.Retranslator/obj

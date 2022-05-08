@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kalantyr.Libs\Kalantyr.Web\Kalantyr.Web.csproj" />
     <ProjectReference Include="..\Microsoft.RuntimeBroker.Models\Microsoft.RuntimeBroker.Models.csproj" />
   </ItemGroup>
 </Project>

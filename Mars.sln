@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.RuntimeBroker.Mod
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FAF8D6C3-8F8B-4EE9-9C76-7679A303B799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.RuntimeBroker.Tests", "Tests\Microsoft.RuntimeBroker.Tests\Microsoft.RuntimeBroker.Tests.csproj", "{B207C61E-3EC0-436A-B013-6C4776C059F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.RuntimeBroker.Tests", "Tests\Microsoft.RuntimeBroker.Tests\Microsoft.RuntimeBroker.Tests.csproj", "{B207C61E-3EC0-436A-B013-6C4776C059F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mars.Retranslator", "Mars.Retranslator\Mars.Retranslator.csproj", "{7936DCEB-8041-45E8-AC68-3576A0D2D564}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{1A50DD9B-B1ED-4D41-95FC-073851EB22B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalantyr.Web", "Kalantyr.Libs\Kalantyr.Web\Kalantyr.Web.csproj", "{BE7D5448-8E11-469D-A7F0-9A1814BB352A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +35,21 @@ Global
 		{B207C61E-3EC0-436A-B013-6C4776C059F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B207C61E-3EC0-436A-B013-6C4776C059F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B207C61E-3EC0-436A-B013-6C4776C059F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7936DCEB-8041-45E8-AC68-3576A0D2D564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7936DCEB-8041-45E8-AC68-3576A0D2D564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7936DCEB-8041-45E8-AC68-3576A0D2D564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7936DCEB-8041-45E8-AC68-3576A0D2D564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B207C61E-3EC0-436A-B013-6C4776C059F4} = {FAF8D6C3-8F8B-4EE9-9C76-7679A303B799}
+		{BE7D5448-8E11-469D-A7F0-9A1814BB352A} = {1A50DD9B-B1ED-4D41-95FC-073851EB22B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A23DD69-D33F-489E-8218-8044E8A693CF}
