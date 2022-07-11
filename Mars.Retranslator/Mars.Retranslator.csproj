@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>$(DotNetTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kalantyr.Libs\Kalantyr.Web\Kalantyr.Web.csproj" />
+    <ProjectReference Include="..\Mars.Retranslator.DataModels\Mars.Retranslator.DataModels.csproj" />
     <ProjectReference Include="..\Microsoft.RuntimeBroker.Models\Microsoft.RuntimeBroker.Models.csproj" />
   </ItemGroup>
 

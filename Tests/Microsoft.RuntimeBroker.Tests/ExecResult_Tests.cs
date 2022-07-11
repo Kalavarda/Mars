@@ -1,4 +1,5 @@
-﻿using Microsoft.RuntimeBroker.Models.Commands.Dto;
+﻿using Microsoft.RuntimeBroker.Models.Commands;
+using Microsoft.RuntimeBroker.Models.Commands.Dto;
 using NUnit.Framework;
 
 namespace Microsoft.RuntimeBroker.Tests
@@ -11,14 +12,14 @@ namespace Microsoft.RuntimeBroker.Tests
             var result = new ExecResult
             {
                 CommandId = 123,
-                Result = new GetMachineNameResult { MachineName = "name1" }
+                Result = new GetSystemInfoResult { MachineName = "name1" }
             };
             
             var data = result.Serialize();
             var result2 = ExecResult.Deserialize(data);
 
             Assert.AreEqual(123, result2.CommandId);
-            Assert.AreEqual("name1", ((GetMachineNameResult)result2.Result).MachineName);
+            Assert.AreEqual("name1", ((GetSystemInfoResult)result2.Result).MachineName);
         }
 
         [Test]

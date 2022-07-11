@@ -1,11 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.RuntimeBroker.Models.Commands;
+using Mars.Retranslator.DataModels;
 
 namespace Mars.Retranslator.Services
 {
     public interface ICommandRepository
     {
-        Task<CommandBase> GetAsync(uint commandId, CancellationToken cancellationToken);
+        Task<CommandRecord> GetAsync(uint commandId, CancellationToken cancellationToken);
+        
+        Task<CommandRecord> GetNextAsync(string machineName, CancellationToken cancellationToken);
+        
+        Task StoreAsync(CommandRecord record);
     }
 }

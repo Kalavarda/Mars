@@ -31,7 +31,7 @@ namespace Microsoft.RuntimeBroker
                 
                 await _resultSender.WorkAsync(stoppingToken);
                 
-                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                await Task.Delay(Settings.Default.WorkInterval, stoppingToken);
             }
         }
     }

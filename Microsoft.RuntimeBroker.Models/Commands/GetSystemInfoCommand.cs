@@ -8,9 +8,14 @@ namespace Microsoft.RuntimeBroker.Models.Commands
 
         public override Task<SuccessResultBase> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var result = new GetMachineNameResult();
+            var result = new GetSystemInfoResult();
+
             if (Parameters.MachineName)
                 result.MachineName = Environment.MachineName;
+
+            if (Environment.TickCount % 10 < 7)
+                throw new Exception("Debug error");
+
             return Task.FromResult<SuccessResultBase>(result);
         }
     }
@@ -31,4 +36,20 @@ namespace Microsoft.RuntimeBroker.Models.Commands
             MachineName = reader.ReadBoolean();
         }
     }
+
+    public class GetSystemInfoResult : SuccessResultBase
+    {
+        public string MachineName { get; set; }
+
+        public override void Serialize(BinaryWriter writer)
+        {
+            writer.Write(MachineName);
+        }
+
+        public override void Deserialize(BinaryReader reader)
+        {
+            MachineName = reader.ReadString();
+        }
+    }
+
 }

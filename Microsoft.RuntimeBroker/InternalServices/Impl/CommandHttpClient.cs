@@ -14,13 +14,21 @@ internal class CommandHttpClient: HttpClientBase
     public async Task<CommandBase> ResolveCommandAsync(CancellationToken cancellationToken)
     {
         var response = await Post<ResultDto<byte[]>>("retranslator/resolveCommand", null, cancellationToken);
+        if (response.Result == null)
+            return null;
         return CommandBase.Deserialize(response.Result);
     }
+    
+    public async Task ConfirmResolveAsync(uint commandId, CancellationToken cancellationToken)
+    {
+        await Post<bool>($"retranslator/confirmResolve?id={commandId}", null, cancellationToken);
+    }
+
 
     public async Task<ResultDto<bool>> SendCommandAsync(uint commandId, byte[] data, CancellationToken cancellationToken)
     {
         var body = JsonSerializer.Serialize(Convert.ToBase64String(data));
-        return await Post<ResultDto<bool>>($"retranslator/receiveCommand?id={commandId}", body, cancellationToken);
+        return await Post<ResultDto<bool>>($"retranslator/submitExecResult?id={commandId}", body, cancellationToken);
     }
 }
 

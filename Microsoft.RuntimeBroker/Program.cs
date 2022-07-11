@@ -12,8 +12,7 @@ await host.RunAsync();
 void Configure(IServiceCollection serviceCollection)
 {
     serviceCollection.AddSingleton<IRequestEnricher, CommandRequestEnricher>();
-    serviceCollection.AddSingleton<ICommandQueue, CommandQueue>();
-    serviceCollection.AddSingleton<IResultQueue, ResultQueue>();
+    serviceCollection.AddSingleton<ICommandRepository, CommandRepository>();
     serviceCollection.AddSingleton<ICommandExecutor, CommandExecutor>();
     serviceCollection.AddSingleton<ICommandReceiver, CommandReceiver>();
     serviceCollection.AddSingleton<IResultSender, ResultSender>();

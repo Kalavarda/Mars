@@ -8,3 +8,5 @@
 /Tests/Microsoft.RuntimeBroker.Tests/obj
 /Mars.Retranslator/bin
 /Mars.Retranslator/obj
+/Mars.Retranslator.DataModels/bin
+/Mars.Retranslator.DataModels/obj

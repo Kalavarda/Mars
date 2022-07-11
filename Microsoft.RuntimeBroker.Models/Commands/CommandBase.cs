@@ -36,4 +36,13 @@ namespace Microsoft.RuntimeBroker.Models.Commands
             return command;
         }
     }
+
+    public class CommandExecutionResult
+    {
+        public DateTime Time { get; set; }
+
+        public SuccessResultBase SuccessResult { get; set; }
+
+        public Exception Error { get; set; }
+    }
 }

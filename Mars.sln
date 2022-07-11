@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{1A50DD9B-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalantyr.Web", "Kalantyr.Libs\Kalantyr.Web\Kalantyr.Web.csproj", "{BE7D5448-8E11-469D-A7F0-9A1814BB352A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mars.Retranslator.DataModels", "Mars.Retranslator.DataModels\Mars.Retranslator.DataModels.csproj", "{202262F5-542D-4A78-A481-808C5E0142AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE7D5448-8E11-469D-A7F0-9A1814BB352A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202262F5-542D-4A78-A481-808C5E0142AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202262F5-542D-4A78-A481-808C5E0142AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202262F5-542D-4A78-A481-808C5E0142AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202262F5-542D-4A78-A481-808C5E0142AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

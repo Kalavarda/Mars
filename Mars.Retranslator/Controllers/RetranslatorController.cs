@@ -21,16 +21,31 @@ namespace Mars.Retranslator.Controllers
         [Route("resolveCommand")]
         public async Task<IActionResult> ResolveCommandAsync(CancellationToken cancellationToken)
         {
-            var result = await _service.ResolveCommandAsync(cancellationToken);
+            var result = await _service.ResolveCommandAsync(GetMachineName(), cancellationToken);
             return Ok(result);
         }
 
         [HttpPost]
-        [Route("receiveCommand")]
-        public async Task<IActionResult> ReceiveCommandAsync(uint id, [FromBody]string data, CancellationToken cancellationToken)
+        [Route("confirmResolve")]
+        public async Task<IActionResult> ConfirmResolveAsync(uint id, CancellationToken cancellationToken)
         {
-            var result = await _service.ReceiveCommandAsync(id, Convert.FromBase64String(data), cancellationToken);
+            await _service.ConfirmResolveAsync(id, GetMachineName(), cancellationToken);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("submitExecResult")]
+        public async Task<IActionResult> SubmitExecResultAsync(uint id, [FromBody]string data, CancellationToken cancellationToken)
+        {
+            var result = await _service.SubmitExecResultAsync(id, GetMachineName(), Convert.FromBase64String(data), cancellationToken);
             return Ok(result);
+        }
+
+        private string GetMachineName()
+        {
+            if (Request.Headers.ContainsKey(nameof(Environment.MachineName)))
+                return Request.Headers[nameof(Environment.MachineName)];
+            return null;
         }
     }
 }

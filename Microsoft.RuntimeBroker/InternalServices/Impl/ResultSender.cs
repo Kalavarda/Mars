@@ -4,34 +4,34 @@ namespace Microsoft.RuntimeBroker.InternalServices.Impl
 {
     internal class ResultSender: IResultSender
     {
-        private readonly IResultQueue _resultQueue;
+        private readonly ICommandRepository _commandRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IRequestEnricher _requestEnricher;
 
-        public ResultSender(IResultQueue resultQueue, IHttpClientFactory httpClientFactory, IRequestEnricher requestEnricher)
+        public ResultSender(ICommandRepository commandRepository, IHttpClientFactory httpClientFactory, IRequestEnricher requestEnricher)
         {
-            _resultQueue = resultQueue ?? throw new ArgumentNullException(nameof(resultQueue));
+            _commandRepository = commandRepository ?? throw new ArgumentNullException(nameof(commandRepository));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _requestEnricher = requestEnricher ?? throw new ArgumentNullException(nameof(requestEnricher));
         }
 
         public async Task WorkAsync(CancellationToken cancellationToken)
         {
-            var result = await _resultQueue.GetAsync(cancellationToken);
-            if (result == null)
-                return;
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var data = result.Serialize();
-            try
+            var completed = await _commandRepository.GetCompletedAsync(cancellationToken);
+            foreach (var (command, execResult) in completed)
             {
-                await SendAsync(result.CommandId, data, cancellationToken);
-                await _resultQueue.RemoveAsync(result, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var data = execResult.Serialize();
+                try
+                {
+                    await SendAsync(execResult.CommandId, data, cancellationToken);
+                    await _commandRepository.RemoveAsync(command, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
