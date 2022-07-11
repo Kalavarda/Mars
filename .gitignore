@@ -10,3 +10,6 @@
 /Mars.Retranslator/obj
 /Mars.Retranslator.DataModels/bin
 /Mars.Retranslator.DataModels/obj
+/Mars.MCC/bin
+/Mars.MCC/obj
+/Mars.MCC/*.user

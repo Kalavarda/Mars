@@ -9,11 +9,14 @@
         public CommandStatus Status { get; set; }
         
         public byte[] Data { get; set; }
+        
+        public byte[] ResultData { get; set; }
     }
 
     public enum CommandStatus
     {
         New,
-        ResolveConfirmed
+        ResolveConfirmed,
+        Completed
     }
 }

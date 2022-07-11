@@ -41,7 +41,7 @@ namespace Mars.Retranslator.Services.Impl
             return _commands[machineName].FirstOrDefault(r => r.Status == CommandStatus.New);
         }
 
-        public Task StoreAsync(CommandRecord record)
+        public Task UpdateAsync(CommandRecord record, CancellationToken cancellationToken)
         {
             return Task.FromResult(record);
         }

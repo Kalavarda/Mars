@@ -10,6 +10,6 @@ namespace Mars.Retranslator.Services
         
         Task<CommandRecord> GetNextAsync(string machineName, CancellationToken cancellationToken);
         
-        Task StoreAsync(CommandRecord record);
+        Task UpdateAsync(CommandRecord record, CancellationToken cancellationToken);
     }
 }

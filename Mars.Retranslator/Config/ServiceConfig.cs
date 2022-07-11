@@ -2,6 +2,6 @@
 {
     public class ServiceConfig
     {
-        public string SecretKey { get; set; }
+        public string MccKey { get; set; }
     }
 }

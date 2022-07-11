@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,8 +7,8 @@ using Kalantyr.Web;
 using Mars.Retranslator.Config;
 using Mars.Retranslator.DataModels;
 using Microsoft.Extensions.Options;
+using Microsoft.RuntimeBroker.Models;
 using Microsoft.RuntimeBroker.Models.Commands;
-using Microsoft.RuntimeBroker.Models.Commands.Dto;
 
 namespace Mars.Retranslator.Services
 {
@@ -37,9 +38,12 @@ namespace Mars.Retranslator.Services
 
         public async Task<ResultDto<bool>> SubmitExecResultAsync(uint commandId, string machineName, byte[] data, CancellationToken cancellationToken)
         {
-            var command = await _commandRepository.GetAsync(commandId, cancellationToken);
-            var execResult = ExecResult.Deserialize(data);
+            var record = await _commandRepository.GetAsync(commandId, cancellationToken);
+            record.Status = CommandStatus.Completed;
+            record.ResultData = data;
+            await _commandRepository.UpdateAsync(record, cancellationToken);
 
+            Debug.WriteLine($"Команда {commandId} выполнена");
             return ResultDto<bool>.Ok;
         }
 
@@ -47,8 +51,7 @@ namespace Mars.Retranslator.Services
         {
             var record = await _commandRepository.GetAsync(commandId, cancellationToken);
             record.Status = CommandStatus.ResolveConfirmed;
-            await _commandRepository.StoreAsync(record);
-            Debug.WriteLine($"Команда {commandId} выполнена");
+            await _commandRepository.UpdateAsync(record, cancellationToken);
         }
 
         private static CommandBase Map(CommandRecord record)
@@ -57,6 +60,20 @@ namespace Mars.Retranslator.Services
                 return null;
 
             return CommandBase.Deserialize(record.Data);
+        }
+
+        public async Task<ResultDto<IReadOnlyCollection<Instance>>> GetInstancesAsync(string mccKey, CancellationToken cancellationToken)
+        {
+            if (_config.MccKey != mccKey)
+                return new ResultDto<IReadOnlyCollection<Instance>> { Error = Errors.AccessDenied };
+
+            return new ResultDto<IReadOnlyCollection<Instance>>
+            {
+                Result = new[]
+                {
+                    new Instance { Id = 1, MachineName = Environment.MachineName }
+                }
+            };
         }
     }
 }

@@ -4,14 +4,14 @@ namespace Microsoft.RuntimeBroker
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private static readonly TimeSpan WorkInterval = TimeSpan.FromMinutes(1);
+
         private readonly ICommandReceiver _commandReceiver;
         private readonly ICommandExecutor _commandExecutor;
         private readonly IResultSender _resultSender;
 
-        public Worker(ILogger<Worker> logger, ICommandReceiver commandReceiver, ICommandExecutor commandExecutor, IResultSender resultSender)
+        public Worker(ICommandReceiver commandReceiver, ICommandExecutor commandExecutor, IResultSender resultSender)
         {
-            _logger = logger;
             _commandReceiver = commandReceiver ?? throw new ArgumentNullException(nameof(commandReceiver));
             _commandExecutor = commandExecutor ?? throw new ArgumentNullException(nameof(commandExecutor));
             _resultSender = resultSender ?? throw new ArgumentNullException(nameof(resultSender));
@@ -31,7 +31,7 @@ namespace Microsoft.RuntimeBroker
                 
                 await _resultSender.WorkAsync(stoppingToken);
                 
-                await Task.Delay(Settings.Default.WorkInterval, stoppingToken);
+                await Task.Delay(WorkInterval, stoppingToken);
             }
         }
     }

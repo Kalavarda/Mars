@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.RuntimeBroker {
+namespace Mars.MCC {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -23,12 +23,25 @@ namespace Microsoft.RuntimeBroker {
             }
         }
         
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:63426")]
+        public string RetranslatorUrl {
+            get {
+                return ((string)(this["RetranslatorUrl"]));
+            }
+            set {
+                this["RetranslatorUrl"] = value;
+            }
+        }
+        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:00:10")]
-        public global::System.TimeSpan WorkInterval {
+        [global::System.Configuration.DefaultSettingValueAttribute("sfadgkjhsfgk")]
+        public string ApiKey {
             get {
-                return ((global::System.TimeSpan)(this["WorkInterval"]));
+                return ((string)(this["ApiKey"]));
             }
         }
     }
