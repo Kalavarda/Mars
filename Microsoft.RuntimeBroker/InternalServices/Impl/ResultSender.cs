@@ -1,18 +1,14 @@
-﻿using Kalantyr.Web;
-
-namespace Microsoft.RuntimeBroker.InternalServices.Impl
+﻿namespace Microsoft.RuntimeBroker.InternalServices.Impl
 {
     internal class ResultSender: IResultSender
     {
         private readonly ICommandRepository _commandRepository;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IRequestEnricher _requestEnricher;
 
-        public ResultSender(ICommandRepository commandRepository, IHttpClientFactory httpClientFactory, IRequestEnricher requestEnricher)
+        public ResultSender(ICommandRepository commandRepository, IHttpClientFactory httpClientFactory)
         {
             _commandRepository = commandRepository ?? throw new ArgumentNullException(nameof(commandRepository));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _requestEnricher = requestEnricher ?? throw new ArgumentNullException(nameof(requestEnricher));
         }
 
         public async Task WorkAsync(CancellationToken cancellationToken)
@@ -37,7 +33,7 @@ namespace Microsoft.RuntimeBroker.InternalServices.Impl
 
         private async Task SendAsync(uint commandId, byte[] data, CancellationToken cancellationToken)
         {
-            var commandHttpClient = new CommandHttpClient(_httpClientFactory, _requestEnricher);
+            var commandHttpClient = new CommandHttpClient(_httpClientFactory);
             var res = await commandHttpClient.SendCommandAsync(commandId, data, cancellationToken);
             if (res.Error != null)
                 throw new Exception(res.Error.Code);

@@ -13,7 +13,7 @@ namespace Microsoft.RuntimeBroker.Models.Commands
             if (Parameters.MachineName)
                 result.MachineName = Environment.MachineName;
 
-            if (Environment.TickCount % 10 < 7)
+            if (Environment.TickCount % 10 < 1)
                 throw new Exception("Debug error");
 
             return Task.FromResult<SuccessResultBase>(result);

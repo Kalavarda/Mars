@@ -7,16 +7,18 @@ namespace Microsoft.RuntimeBroker.InternalServices.Impl;
 
 internal class CommandHttpClient: HttpClientBase
 {
-    public CommandHttpClient(IHttpClientFactory httpClientFactory, IRequestEnricher requestEnricher) : base(httpClientFactory, requestEnricher)
+    public CommandHttpClient(IHttpClientFactory httpClientFactory) : base(httpClientFactory, new CommandRequestEnricher())
     {
     }
 
-    public async Task<CommandBase> ResolveCommandAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<CommandBase>> ResolveCommandsAsync(CancellationToken cancellationToken)
     {
-        var response = await Post<ResultDto<byte[]>>("retranslator/resolveCommand", null, cancellationToken);
+        var response = await Post<ResultDto<byte[][]>>("retranslator/resolveCommands", null, cancellationToken);
         if (response.Result == null)
             return null;
-        return CommandBase.Deserialize(response.Result);
+        return response.Result
+            .Select(CommandBase.Deserialize)
+            .ToArray();
     }
     
     public async Task ConfirmResolveAsync(uint commandId, CancellationToken cancellationToken)
@@ -36,6 +38,7 @@ internal class CommandRequestEnricher: IRequestEnricher
 {
     public void Enrich(HttpRequestHeaders requestHeaders)
     {
+        requestHeaders.Add("App-Key", "DXPoka23sfij14");
         requestHeaders.Add(nameof(Environment.MachineName), Environment.MachineName);
     }
 }

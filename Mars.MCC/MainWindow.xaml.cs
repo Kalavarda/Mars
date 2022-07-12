@@ -139,5 +139,10 @@ namespace Mars.MCC
 
             _dataGrid.ItemsSource = getCommandsResult.Result.OrderByDescending(r => r.Id);
         }
+
+        private async void OnMiCommandsRefresh_OnClick(object sender, RoutedEventArgs e)
+        {
+            await ReloadCommandsAsync();
+        }
     }
 }

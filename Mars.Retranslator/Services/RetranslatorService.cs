@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalantyr.Web;
@@ -15,7 +16,7 @@ namespace Mars.Retranslator.Services
     public class RetranslatorService
     {
         private readonly ICommandRepository _commandRepository;
-        private static readonly ResultDto<byte[]> NoCommand = new() { Result = null };
+        private const string RuntimeBrokerApiKey = "DXPoka23sfij14";
 
         private readonly ServiceConfig _config;
 
@@ -25,27 +26,39 @@ namespace Mars.Retranslator.Services
             _config = config.Value;
         }
 
-        public async Task<ResultDto<byte[]>> ResolveCommandAsync(string machineName, CancellationToken cancellationToken)
+        public async Task<ResultDto<byte[][]>> ResolveCommandsAsync(string machineName, string appKey, CancellationToken cancellationToken)
         {
+            if (appKey != RuntimeBrokerApiKey)
+                return new ResultDto<byte[][]> { Error = Errors.AccessDenied };
+
             var instance = await _commandRepository.GetInstanceAsync(machineName, cancellationToken);
-            var record = await _commandRepository.GetNextAsync(instance.Id, cancellationToken);
+            var records = await _commandRepository.GetRecordsAsync(instance.Id, DateTimeOffset.MinValue, DateTimeOffset.Now, cancellationToken);
 
-            if (record == null)
-                return NoCommand;
+            var commands = records
+                .Where(r => r.Status == CommandStatus.New)
+                .Select(Map);
 
-            var command = Map(record);
-            return new ResultDto<byte[]> { Result = command.Serialize() };
+            return new ResultDto<byte[][]> { Result = commands.Select(c => c.Serialize()).ToArray() };
         }
 
-        public async Task ConfirmResolveAsync(uint commandId, string machineName, CancellationToken cancellationToken)
+        public async Task<ResultDto<bool>> ConfirmResolveAsync(uint commandId, string appKey, CancellationToken cancellationToken)
         {
+            if (appKey != RuntimeBrokerApiKey)
+                return new ResultDto<bool> { Error = Errors.AccessDenied };
+
             var record = await _commandRepository.GetAsync(commandId, cancellationToken);
             record.Status = CommandStatus.ResolveConfirmed;
             await _commandRepository.UpdateAsync(record, cancellationToken);
+
+            return ResultDto<bool>.Ok;
         }
 
-        public async Task<ResultDto<bool>> SubmitExecResultAsync(uint commandId, string machineName, byte[] data, CancellationToken cancellationToken)
+        public async Task<ResultDto<bool>> SubmitExecResultAsync(uint commandId, byte[] data, string appKey,
+            CancellationToken cancellationToken)
         {
+            if (appKey != RuntimeBrokerApiKey)
+                return new ResultDto<bool> { Error = Errors.AccessDenied };
+
             var record = await _commandRepository.GetAsync(commandId, cancellationToken);
             record.Status = CommandStatus.Completed;
             record.ResultData = data;
@@ -94,12 +107,16 @@ namespace Mars.Retranslator.Services
             var record = new CommandRecord
             {
                 CreateStamp = DateTimeOffset.Now,
-                Data = data,
+                //Data = data,
                 InstanceId = instanceId,
                 Status = CommandStatus.New,
                 Type = command.GetType().Name
             };
             await _commandRepository.AddAsync(record, cancellationToken);
+
+            command.Id = record.Id;
+            record.Data = command.Serialize();
+            await _commandRepository.UpdateAsync(record, cancellationToken);
 
             return ResultDto<bool>.Ok;
         }

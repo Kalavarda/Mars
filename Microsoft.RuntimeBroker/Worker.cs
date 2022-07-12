@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.RuntimeBroker.InternalServices;
 
 namespace Microsoft.RuntimeBroker
@@ -20,19 +21,26 @@ namespace Microsoft.RuntimeBroker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
-            {
-                await _commandReceiver.WorkAsync(stoppingToken);
+                try
+                {
+                    await _commandReceiver.WorkAsync(stoppingToken);
 
-                stoppingToken.ThrowIfCancellationRequested();
+                    stoppingToken.ThrowIfCancellationRequested();
 
-                await _commandExecutor.WorkAsync(stoppingToken);
-                
-                stoppingToken.ThrowIfCancellationRequested();
-                
-                await _resultSender.WorkAsync(stoppingToken);
-                
-                await Task.Delay(WorkInterval, stoppingToken);
-            }
+                    await _commandExecutor.WorkAsync(stoppingToken);
+
+                    stoppingToken.ThrowIfCancellationRequested();
+
+                    await _resultSender.WorkAsync(stoppingToken);
+
+                    await Task.Delay(WorkInterval, stoppingToken);
+                }
+                catch (Exception error)
+                {
+                    Debug.WriteLine(error.GetBaseException().ToString());
+                    await Task.Delay(WorkInterval, stoppingToken);
+                    await Task.Delay(WorkInterval, stoppingToken);
+                }
         }
     }
 }

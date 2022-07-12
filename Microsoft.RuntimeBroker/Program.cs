@@ -1,5 +1,6 @@
-using Kalantyr.Web;
+using Microsoft.Extensions.Options;
 using Microsoft.RuntimeBroker;
+using Microsoft.RuntimeBroker.Config;
 using Microsoft.RuntimeBroker.InternalServices;
 using Microsoft.RuntimeBroker.InternalServices.Impl;
 
@@ -9,13 +10,17 @@ var host = Host.CreateDefaultBuilder(args)
 
 await host.RunAsync();
 
-void Configure(IServiceCollection serviceCollection)
+void Configure(HostBuilderContext context, IServiceCollection serviceCollection)
 {
-    serviceCollection.AddSingleton<IRequestEnricher, CommandRequestEnricher>();
+    serviceCollection.Configure<ServiceConfig>(context.Configuration.GetSection("Service"));
+
     serviceCollection.AddSingleton<ICommandRepository, CommandRepository>();
     serviceCollection.AddSingleton<ICommandExecutor, CommandExecutor>();
     serviceCollection.AddSingleton<ICommandReceiver, CommandReceiver>();
     serviceCollection.AddSingleton<IResultSender, ResultSender>();
-    serviceCollection.AddHttpClient<CommandHttpClient>(q => q.BaseAddress = new Uri("http://localhost:63426"));
+    serviceCollection.AddHttpClient<CommandHttpClient>((sp, client) =>
+    {
+        client.BaseAddress = new Uri(sp.GetService<IOptions<ServiceConfig>>().Value.RetranslatorUrl);
+    });
     serviceCollection.AddHostedService<Worker>();
 }

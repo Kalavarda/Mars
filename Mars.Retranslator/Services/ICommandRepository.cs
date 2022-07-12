@@ -11,8 +11,6 @@ namespace Mars.Retranslator.Services
     {
         Task<CommandRecord> GetAsync(uint commandId, CancellationToken cancellationToken);
         
-        Task<CommandRecord> GetNextAsync(uint instanceId, CancellationToken cancellationToken);
-        
         Task<Instance> GetInstanceAsync(string machineName, CancellationToken cancellationToken);
 
         Task<IReadOnlyCollection<CommandRecord>> GetRecordsAsync(uint instanceId, DateTimeOffset startDate, DateTimeOffset endDate, CancellationToken cancellationToken);

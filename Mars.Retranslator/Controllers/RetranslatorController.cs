@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Kalantyr.Web;
 using Mars.Retranslator.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,10 @@ namespace Mars.Retranslator.Controllers
         }
 
         [HttpPost]
-        [Route("resolveCommand")]
-        public async Task<IActionResult> ResolveCommandAsync(CancellationToken cancellationToken)
+        [Route("resolveCommands")]
+        public async Task<IActionResult> ResolveCommandsAsync(CancellationToken cancellationToken)
         {
-            var result = await _service.ResolveCommandAsync(GetMachineName(), cancellationToken);
+            var result = await _service.ResolveCommandsAsync(GetMachineName(), Request.GetAppKey(), cancellationToken);
             return Ok(result);
         }
 
@@ -29,7 +30,7 @@ namespace Mars.Retranslator.Controllers
         [Route("confirmResolve")]
         public async Task<IActionResult> ConfirmResolveAsync(uint id, CancellationToken cancellationToken)
         {
-            await _service.ConfirmResolveAsync(id, GetMachineName(), cancellationToken);
+            await _service.ConfirmResolveAsync(id, Request.GetAppKey(), cancellationToken);
             return Ok();
         }
 
@@ -37,7 +38,7 @@ namespace Mars.Retranslator.Controllers
         [Route("submitExecResult")]
         public async Task<IActionResult> SubmitExecResultAsync(uint id, [FromBody]string data, CancellationToken cancellationToken)
         {
-            var result = await _service.SubmitExecResultAsync(id, GetMachineName(), Convert.FromBase64String(data), cancellationToken);
+            var result = await _service.SubmitExecResultAsync(id, Convert.FromBase64String(data), Request.GetAppKey(), cancellationToken);
             return Ok(result);
         }
 
