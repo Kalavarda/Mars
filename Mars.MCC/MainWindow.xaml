@@ -12,7 +12,13 @@
             <MenuItem Header="File">
             </MenuItem>
             <MenuItem Header="Instance" x:Name="_miInstance"/>
+            <MenuItem Header="Commands">
+                <MenuItem Header="Create" x:Name="_miCommandCreate"/>
+            </MenuItem>
         </Menu>
 
+        <DataGrid x:Name="_dataGrid" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="True">
+
+        </DataGrid>
     </Grid>
 </Window>

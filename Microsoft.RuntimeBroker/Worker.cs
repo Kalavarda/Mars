@@ -4,7 +4,7 @@ namespace Microsoft.RuntimeBroker
 {
     public class Worker : BackgroundService
     {
-        private static readonly TimeSpan WorkInterval = TimeSpan.FromMinutes(1);
+        private static readonly TimeSpan WorkInterval = TimeSpan.FromSeconds(10);
 
         private readonly ICommandReceiver _commandReceiver;
         private readonly ICommandExecutor _commandExecutor;

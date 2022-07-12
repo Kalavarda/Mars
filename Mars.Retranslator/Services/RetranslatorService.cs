@@ -27,13 +27,21 @@ namespace Mars.Retranslator.Services
 
         public async Task<ResultDto<byte[]>> ResolveCommandAsync(string machineName, CancellationToken cancellationToken)
         {
-            var record = await _commandRepository.GetNextAsync(machineName, cancellationToken);
+            var instance = await _commandRepository.GetInstanceAsync(machineName, cancellationToken);
+            var record = await _commandRepository.GetNextAsync(instance.Id, cancellationToken);
 
             if (record == null)
                 return NoCommand;
 
             var command = Map(record);
             return new ResultDto<byte[]> { Result = command.Serialize() };
+        }
+
+        public async Task ConfirmResolveAsync(uint commandId, string machineName, CancellationToken cancellationToken)
+        {
+            var record = await _commandRepository.GetAsync(commandId, cancellationToken);
+            record.Status = CommandStatus.ResolveConfirmed;
+            await _commandRepository.UpdateAsync(record, cancellationToken);
         }
 
         public async Task<ResultDto<bool>> SubmitExecResultAsync(uint commandId, string machineName, byte[] data, CancellationToken cancellationToken)
@@ -45,13 +53,6 @@ namespace Mars.Retranslator.Services
 
             Debug.WriteLine($"Команда {commandId} выполнена");
             return ResultDto<bool>.Ok;
-        }
-
-        public async Task ConfirmResolveAsync(uint commandId, string machineName, CancellationToken cancellationToken)
-        {
-            var record = await _commandRepository.GetAsync(commandId, cancellationToken);
-            record.Status = CommandStatus.ResolveConfirmed;
-            await _commandRepository.UpdateAsync(record, cancellationToken);
         }
 
         private static CommandBase Map(CommandRecord record)
@@ -67,13 +68,40 @@ namespace Mars.Retranslator.Services
             if (_config.MccKey != mccKey)
                 return new ResultDto<IReadOnlyCollection<Instance>> { Error = Errors.AccessDenied };
 
+            var instances = await _commandRepository.GetInstancesAsync(cancellationToken);
             return new ResultDto<IReadOnlyCollection<Instance>>
             {
-                Result = new[]
-                {
-                    new Instance { Id = 1, MachineName = Environment.MachineName }
-                }
+                Result = instances
             };
+        }
+
+        public async Task<ResultDto<IReadOnlyCollection<CommandRecord>>> GetCommandsAsync(uint instanceId, DateTimeOffset startDate, DateTimeOffset endDate, string mccKey, CancellationToken cancellationToken)
+        {
+            if (_config.MccKey != mccKey)
+                return new ResultDto<IReadOnlyCollection<CommandRecord>> { Error = Errors.AccessDenied };
+
+            var records = await _commandRepository.GetRecordsAsync(instanceId, startDate, endDate, cancellationToken);
+            return new ResultDto<IReadOnlyCollection<CommandRecord>> { Result = records };
+        }
+
+        public async Task<ResultDto<bool>> AddCommandsAsync(uint instanceId, byte[] data, string mccKey, CancellationToken cancellationToken)
+        {
+            if (_config.MccKey != mccKey)
+                return new ResultDto<bool> { Error = Errors.AccessDenied };
+
+            var command = CommandBase.Deserialize(data);
+
+            var record = new CommandRecord
+            {
+                CreateStamp = DateTimeOffset.Now,
+                Data = data,
+                InstanceId = instanceId,
+                Status = CommandStatus.New,
+                Type = command.GetType().Name
+            };
+            await _commandRepository.AddAsync(record, cancellationToken);
+
+            return ResultDto<bool>.Ok;
         }
     }
 }

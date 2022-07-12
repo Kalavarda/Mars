@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kalantyr.Libs\Kalantyr.Web\Kalantyr.Web.csproj" />
+    <ProjectReference Include="..\Mars.Retranslator.DataModels\Mars.Retranslator.DataModels.csproj" />
     <ProjectReference Include="..\Microsoft.RuntimeBroker.Models\Microsoft.RuntimeBroker.Models.csproj" />
   </ItemGroup>
 

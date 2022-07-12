@@ -25,5 +25,21 @@ namespace Mars.Retranslator.Controllers
             var result = await _service.GetInstancesAsync(Request.GetAppKey(), cancellationToken);
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("commands")]
+        public async Task<IActionResult> GetCommandsAsync(uint instId, CancellationToken cancellationToken)
+        {
+            var result = await _service.GetCommandsAsync(instId, DateTimeOffset.Now.AddDays(-7), DateTimeOffset.Now, Request.GetAppKey(), cancellationToken);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("add")]
+        public async Task<IActionResult> GetCommandsAsync(uint instId, [FromBody] string data, CancellationToken cancellationToken)
+        {
+            var result = await _service.AddCommandsAsync(instId, Convert.FromBase64String(data), Request.GetAppKey(), cancellationToken);
+            return Ok(result);
+        }
     }
 }
